@@ -4,35 +4,31 @@ import kotlin.math.abs
 class Solution {
     data class Point(val x: Int, val y: Int)
 
-    fun getDistance(p1: Point, p2: Point): Int = abs(p1.x - p2.x) + abs(p1.y - p2.y)
+    // Extension function makes the call site cleaner: p1.distTo(p2)
+    private fun Point.distTo(other: Point) = abs(x - other.x) + abs(y - other.y)
 
     fun minCostConnectPoints(points: Array<IntArray>): Int {
-        // Pre-convert to Point objects to avoid re-allocation in loops
-        val allPoints = points.map { Point(it[0], it[1]) }
+        val allPoints = points.map { (x, y) -> Point(x, y) }
         val n = allPoints.size
 
         var totalCost = 0
         val visited = mutableSetOf<Point>()
 
-        // Min-heap tracks {distance, point}; start with first point at 0 cost
-        val minHeap = PriorityQueue<Pair<Int, Point>>(compareBy { it.first })
-        minHeap.add(0 to allPoints[0])
+        // Use a min-heap; Pair(distance, point)
+        val pq = PriorityQueue<Pair<Int, Point>>(compareBy { it.first })
+        pq.add(0 to allPoints[0])
 
-        while (visited.size < n && minHeap.isNotEmpty()) {
-            val (dist, curr) = minHeap.poll()
+        while (visited.size < n && pq.isNotEmpty()) {
+            val (dist, curr) = pq.poll()
 
-            // Skip if point is already part of the MST
-            if (curr in visited) continue
+            if (!visited.add(curr)) continue // add() returns false if item already exists
 
-            // Add the cheapest available edge to total and mark as visited
             totalCost += dist
-            visited.add(curr)
 
-            // Add all reachable unvisited neighbors to the heap
-            allPoints.filter { it !in visited }
-                .forEach { nextPoint ->
-                    minHeap.add(getDistance(curr, nextPoint) to nextPoint)
-                }
+            // Use sequences to avoid creating intermediate lists with filter
+            allPoints.asSequence()
+                .filter { it !in visited }
+                .forEach { next -> pq.add(curr.distTo(next) to next) }
         }
 
         return totalCost
