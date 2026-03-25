@@ -12,35 +12,34 @@ import kotlin.math.abs
  * 3. All points must be connected (directly or indirectly).
  * 4. Return the minimum sum of edge weights.
  */
-
-class SolutionA {
+class Solution {
     data class Point(val x: Int, val y: Int)
 
-    // Extension function makes the call site cleaner: p1.distTo(p2)
+    // Extension function makes the call site cleaner: a.distTo(b)
     private fun Point.distTo(other: Point) = abs(x - other.x) + abs(y - other.y)
 
     fun minCostConnectPoints(points: Array<IntArray>): Int {
-        val allPoints = points.map { (x, y) -> Point(x, y) }
-        val n = allPoints.size
+        val nodes = points.map { (x, y) -> Point(x, y) }
+        val n = nodes.size
 
         var totalCost = 0
-        val visited = mutableSetOf<Point>()
+        val settled = mutableSetOf<Point>()
 
-        // Use a min-heap; Pair(distance, point)
+        // Min-heap of (cost, point) — always expand the cheapest reachable node next
         val pq = PriorityQueue<Pair<Int, Point>>(compareBy { it.first })
-        pq.add(0 to allPoints[0])
+        pq.add(0 to nodes[0])
 
-        while (visited.size < n && pq.isNotEmpty()) {
-            val (dist, curr) = pq.poll()
+        while (settled.size < n && pq.isNotEmpty()) {
+            val (cost, node) = pq.poll()
 
-            if (!visited.add(curr)) continue // add() returns false if item already exists
+            if (!settled.add(node)) continue // add() returns false if already settled
 
-            totalCost += dist
+            totalCost += cost
 
             // Use sequences to avoid creating intermediate lists with filter
-            allPoints.asSequence()
-                .filter { it !in visited }
-                .forEach { next -> pq.add(curr.distTo(next) to next) }
+            nodes.asSequence()
+                .filter { it !in settled }
+                .forEach { neighbor -> pq.add(node.distTo(neighbor) to neighbor) }
         }
 
         return totalCost
