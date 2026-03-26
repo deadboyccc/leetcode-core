@@ -10,11 +10,13 @@ package leetcode1971
 class Solution {
 
     fun validPath(n: Int, edges: Array<IntArray>, source: Int, destination: Int): Boolean {
+        // Trivial case: already at the target
         if (source == destination) return true
 
         // Build adjacency list idiomatically
         val adj = mutableMapOf<Int, MutableList<Int>>()
         for ((u, v) in edges) {
+            // Using += shorthand for .add()
             adj.getOrPut(u) { mutableListOf() } += v
             adj.getOrPut(v) { mutableListOf() } += u
         }
@@ -23,6 +25,7 @@ class Solution {
     }
 
     private fun hasPathBfs(start: Int, target: Int, adj: Map<Int, List<Int>>): Boolean {
+        // Initialize Queue with start node using .apply scope function
         val queue = ArrayDeque<Int>().apply { addLast(start) }
         val visited = mutableSetOf(start)
 
@@ -31,14 +34,18 @@ class Solution {
 
             // Safe access using Elvis operator to handle nodes with no neighbors
             for (neighbor in adj[current] ?: emptyList()) {
+                // Goal reached
                 if (neighbor == target) return true
 
-                if (visited.add(neighbor)) { // .add() returns true if the element was not already present
+                // Check if we haven't visited this neighbor yet
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor) // Mark as visited to prevent infinite loops
                     queue.addLast(neighbor)
                 }
             }
         }
 
+        // Exhausted all reachable nodes without finding the target
         return false
     }
 }
