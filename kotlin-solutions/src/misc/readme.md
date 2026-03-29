@@ -287,7 +287,3 @@ class BidirectionalSearchTest {
 ```
 
 ---
-
-Now you have a complete, copy-paste ready documentation file for your repository!
-
-**Would you like me to walk you through how to set up GitHub Actions (CI) so these JUnit tests run automatically every time you push code to your repo?**
