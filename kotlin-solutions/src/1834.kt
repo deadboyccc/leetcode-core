@@ -23,38 +23,22 @@ import java.util.*
  */
 // draft
 class Solution {
-    // tasks = [arrivalTime, ProcessingTime]
-    data class Task(val arrivalTime: Int, val processingTime: Int, val index: Int)
+    // tasks = [arrivalTime, ProcessingTime, originalIndex]
+    data class Task(val arrivalTime: Int, val processingTime: Int, val originalIndex: Int)
 
     fun getOrder(tasks: Array<IntArray>): IntArray {
         // sort tasks by arrivalTime - we start at t=1
-        tasks.sortBy { it[0] }
+        val tasks =
+            tasks.mapIndexed { index, (arrivalTime, processingTime) ->
+                Task(arrivalTime, processingTime, index)
+            }
+        tasks.sortedBy { it.processingTime }.sortedBy { it.originalIndex }
 
         // heap tasks by processing time then by index
-        val pq = PriorityQueue<Task>(compareBy<Task> { it.processingTime }.thenBy { it.index })
+        val pq = PriorityQueue<Task>(compareBy<Task> { it.processingTime }.thenBy { it.originalIndex })
 
-        // answers
-        val sequenceOfTasks = mutableListOf<Int>()
-        var currTime = 1;
-        var taskIndex = 0;
 
-        // answers < tasks
-        while (sequenceOfTasks.size < tasks.size) {
-
-            for (i in taskIndex until tasks.size) {
-                if (tasks[i][0] > currTime) {
-                    break
-                }
-                pq.add(Task(i, currTime, currTime))
-            }
-            while (pq.isNotEmpty()) {
-                val currTask = pq.poll()
-                currTime += currTask.processingTime
-                sequenceOfTasks.add(currTask.index)
-            }
-
-        }
-        return sequenceOfTasks.toIntArray()
+        return intArrayOf();
 
 
     }
