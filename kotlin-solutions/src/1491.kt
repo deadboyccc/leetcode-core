@@ -15,3 +15,13 @@ class Solution {
         return (sum - max - min) / (salary.size - 2)
     }
 }
+
+class SolutionFP {
+    fun average(salary: IntArray): Double =
+    // Triple of [ Sum - max - in ] -> for each salary sum+= salary, max = maxOf, min = minOf
+        // let ( map ) -> sum max min -> sum-max-min / salary.size -2
+        salary.fold(Triple(0.0, Int.MIN_VALUE, Int.MAX_VALUE)) { (sum, max, min), s ->
+            Triple(sum + s, maxOf(max, s), minOf(min, s))
+        }.let { (sum, max, min) -> (sum - max - min) / (salary.size - 2) }
+
+}
