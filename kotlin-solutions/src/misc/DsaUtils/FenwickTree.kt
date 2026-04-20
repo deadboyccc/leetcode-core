@@ -1,4 +1,4 @@
-package misc.fenwick
+package misc.DsaUtils
 
 class FenwickTree(private val arr: IntArray) {
     // We use arr.size + 1 because Fenwick Trees are 1-indexed for bit manipulation
