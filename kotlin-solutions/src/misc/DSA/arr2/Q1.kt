@@ -1,4 +1,4 @@
-package quest.DSA.arr2.q1
+package misc.DSA.arr2.q1
 
 // 1,2,2,4 = > 2 is repeated, 3 is missing
 // 1. Loop through the array at index of i = 2 if 3 is not found that means the means it's the element that is

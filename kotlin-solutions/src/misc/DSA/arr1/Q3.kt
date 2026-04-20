@@ -1,4 +1,4 @@
-package quest.DSA.q3
+package misc.DSA.q3
 
 class Solution {
     fun findMaxConsecutiveOnes(nums: IntArray): Int {

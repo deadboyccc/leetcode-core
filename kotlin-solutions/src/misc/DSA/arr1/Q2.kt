@@ -1,4 +1,4 @@
-package quest.DSA.q2
+package misc.DSA.q2
 
 class Solution {
     // nums length is even ( 2n )

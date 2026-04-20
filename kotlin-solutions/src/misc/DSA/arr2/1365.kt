@@ -1,4 +1,4 @@
-package quest.DSA.arr2.one365
+package misc.DSA.arr2.one365
 
 // sorted[i] > > while sorted[i+1]  once we land on the final repeating sorted[i] we return it's index - size
 // how many element it's bigger than
