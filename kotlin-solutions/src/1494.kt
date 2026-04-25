@@ -1,3 +1,4 @@
+package one494
 class Solution {
     fun minNumberOfSemesters(n: Int, relations: Array<IntArray>, k: Int): Int {
         val prereq = IntArray(n) { 0 }
