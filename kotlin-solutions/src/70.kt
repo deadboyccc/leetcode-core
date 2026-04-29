@@ -1,5 +1,21 @@
 package seven0;
 
+// generic 1D full array solution
+class Solution1D {
+    fun climbStairs(n: Int): Int {
+        val waysToClimb = IntArray(n + 1);
+        waysToClimb[0] = 0
+        waysToClimb[1] = 1
+        waysToClimb[2] = 2
+        for (i in 3..waysToClimb.lastIndex) {
+            waysToClimb[i] += waysToClimb[i - 1] + waysToClimb[i - 2]
+        }
+        return waysToClimb[waysToClimb.lastIndex]
+
+    }
+}
+
+
 fun climbStairs(n: Int): Int {
     if (n <= 2) return n
     return (3..n).fold(1 to 2) { (prev1, prev2), _ ->
