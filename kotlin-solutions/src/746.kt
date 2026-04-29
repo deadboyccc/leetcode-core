@@ -1,5 +1,30 @@
 package seven46
 
+class class1D {
+    class Solution {
+        fun minCostClimbingStairs(cost: IntArray): Int {
+            val n = cost.size
+            // dp[i] will store the minimum cost to reach step i
+            val dp = IntArray(n + 1)
+
+            // You can start at index 0 or index 1 for free
+            dp[0] = 0
+            dp[1] = 0
+
+            for (i in 2..n) {
+
+                // To reach step i, you could have come from i-1 or i-2
+                // You must pay the cost of the step you are leaving
+                val option1 = dp[i - 1] + cost[i - 1]
+                val option2 = dp[i - 2] + cost[i - 2]
+                dp[i] = minOf(option1, option2)
+            }
+
+            return dp[n]
+        }
+    }
+}
+
 class TabulationSolution {
     class Solution {
         fun minCostClimbingStairs(cost: IntArray): Int {
