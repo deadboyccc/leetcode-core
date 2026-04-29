@@ -1,5 +1,35 @@
 package seven0;
 
+fun climbStairs(n: Int): Int {
+    if (n <= 2) return n
+    return (3..n).fold(1 to 2) { (prev1, prev2), _ ->
+        prev2 to (prev1 + prev2)
+    }.second
+}
+
+class DPSolutionReadable {
+    fun climbStairs(n: Int): Int {
+        // Edge Case Handling:
+        // If n = 1, there is only 1 way. If n = 2, there are 2 ways.
+        // Your loop starts at 3, so we handle these cases manually.
+        if (n <= 2) return n
+
+        // We use .fold to keep track of the two previous results (prev1, prev2).
+        // Initial state: (1 way to reach step 1, 2 ways to reach step 2)
+        return (3..n).fold(1 to 2) { (prev1, prev2), _ ->
+
+            // Current ways = ways to reach (n-1) + ways to reach (n-2)
+            val current = prev1 + prev2
+
+            // Shift the window forward:
+            // The old prev2 becomes the new prev1
+            // The current sum becomes the new prev2
+            prev2 to current
+
+        }.second // Return the second value of the pair (the result for step n)
+    }
+}
+
 class Solution {
     // We use a Map or an Array to store results.
     // An Array is faster since our keys are just numbers 0 to n.
