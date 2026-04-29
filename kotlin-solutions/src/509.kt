@@ -7,7 +7,7 @@ class Solution {
         // fib(0) =0 , f(1) = 1
         return (2..n).fold(0 to 1) { (minusTwo, minusOne), i ->
             // minusTwo to minusOne
-
+            // n-2 to n-1
             minusOne to minusOne + minusTwo
 
         }.second
