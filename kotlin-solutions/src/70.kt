@@ -3,6 +3,7 @@ package seven0;
 // generic 1D full array solution
 class Solution1D {
     fun climbStairs(n: Int): Int {
+        if (n == 1 || n == 2) return n
         val waysToClimb = IntArray(n + 1);
         waysToClimb[0] = 0
         waysToClimb[1] = 1
