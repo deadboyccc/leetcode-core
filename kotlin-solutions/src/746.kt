@@ -1,5 +1,28 @@
 package seven46
 
+class OptimizedSolution {
+    fun minCostClimbingStairs(cost: IntArray): Int {
+
+        // These represent the minimum cost to reach the previous two steps
+        // You can start for free at idx 0, 1
+        // [ prev2,  prev1,  currStep]
+        var prev2 = 0
+        var prev1 = 0
+
+        // Iterate through every cost in the array
+        for (i in 0 until cost.size) {
+            // The cost to reach the NEXT step is current cost + min of previous two
+            val current = cost[i] + minOf(prev1, prev2)
+
+            // Shift our window forward
+            prev2 = prev1
+            prev1 = current
+        }
+
+        // The top of the floor can be reached from either of the last two steps
+        return minOf(prev1, prev2)
+    }
+}
 class class1D {
     class Solution {
         fun minCostClimbingStairs(cost: IntArray): Int {
