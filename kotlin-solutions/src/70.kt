@@ -1,5 +1,27 @@
 package seven0;
 
+// optimized 2 vars dp
+class OptimizedSolution {
+    fun climbStairs(n: Int): Int {
+        // [ prev2, prev1, currStep ]
+        var prev2 = 1 // 1->
+        var prev1 = 2 //1->1->  or 2->
+        if (n <= 2) return n
+
+        repeat(n - 2) {
+            val currStep = prev1 + prev2
+
+            // shift states
+            prev2 = prev1
+            prev1 = currStep
+        }
+        return prev1
+
+
+    }
+
+
+}
 // generic 1D full array solution
 class Solution1D {
     fun climbStairs(n: Int): Int {
