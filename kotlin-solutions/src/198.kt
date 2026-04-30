@@ -1,5 +1,24 @@
 package one98
 
+class MostOptimized {
+    fun rob(nums: IntArray): Int {
+        // [ prev2, prev1, currRobt]
+        var prev2 = 0 // Best if we stopped 2 houses ago
+        var prev1 = 0 // Best if we stopped 1 house ago
+
+        for (num in nums) {
+            // Recurrence: Max of (robbing current + 2 houses ago) OR (skipping current)
+            val current = maxOf(num + prev2, prev1)
+
+            // Shift states forward
+            prev2 = prev1
+            prev1 = current
+        }
+
+        return prev1
+    }
+}
+
 class ReadableSolution {
     fun rob(nums: IntArray): Int =
         nums.fold(0 to 0) { (twoBack, oneBack), houseValue ->
