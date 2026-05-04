@@ -1,5 +1,35 @@
 package four5
 
+class BottomUpDpSolution {
+
+    fun jump(nums: IntArray): Int {
+        val n = nums.size
+
+        // dp[i] = minimum number of jumps needed to reach index i
+        val dp = IntArray(n) { Int.MAX_VALUE }
+        dp[0] = 0 // starting position requires 0 jumps
+
+        for (i in 0 until n) {
+
+            // Determine reachable range from index i
+            val firstReachableIndex = i + 1
+            val lastReachableIndex = minOf(i + nums[i], n - 1)
+
+            // Try all reachable positions from i
+            for (targetIndex in firstReachableIndex..lastReachableIndex) {
+
+                // One more jump from i to targetIndex
+                val jumpsViaCurrent = dp[i] + 1
+
+                // Update with the minimum jumps needed
+                dp[targetIndex] = minOf(dp[targetIndex], jumpsViaCurrent)
+            }
+        }
+
+        return dp[n - 1]
+    }
+}
+
 class GreedySolution {
     fun jump(nums: IntArray): Int {
         // [ mark blocks of regions reachable by a 1], max # of blocks = max jumps (reachability is guaranteed}
@@ -30,6 +60,7 @@ class GreedySolution {
 
     }
 }
+
 class Solution {
     fun jump(nums: IntArray): Int {
         val lastIndex = nums.lastIndex
