@@ -41,6 +41,7 @@ class Solution2 {
 // Time Complexity: O(n) as we iterate through the array and buckets linearly.
 // Space Complexity: O(n) to store the frequency map and the bucket array.
 class BucketSortSolution {
+
     class Solution {
         fun topKFrequent(nums: IntArray, k: Int): IntArray {
             // 1. Map numbers to their frequencies: O(n)
@@ -48,6 +49,9 @@ class BucketSortSolution {
 
             // 2. Create buckets where index = frequency: O(n)
             val buckets = Array(nums.size + 1) { mutableListOf<Int>() }
+            // say numSize is 5
+            // freq can only be 1 to n+1( the least freq is 1, the largest is you take the whole arr = n+1)
+            // [0,1,2,3,4,5]
 
             freqMap.forEach { (num, count) ->
                 buckets[count].add(num)
@@ -57,7 +61,7 @@ class BucketSortSolution {
             val result = IntArray(k)
             var index = 0
 
-            for (f in buckets.size - 1 downTo 0) {
+            for (f in buckets.lastIndex downTo 0) {
                 for (num in buckets[f]) {
                     result[index++] = num
                     if (index == k) return result
