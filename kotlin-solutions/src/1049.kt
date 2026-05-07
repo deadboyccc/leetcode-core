@@ -3,6 +3,27 @@ package one049
 import misc.kia_part_one.printSeperator
 import kotlin.math.abs
 
+// Partition stones into two groups minimizing |S1 - S2|.
+// Track all reachable S2 sums; the answer is min over sums of |total - 2*s|.
+class HashSetSolution {
+    class Solution {
+        fun lastStoneWeightII(stones: IntArray): Int {
+            val total = stones.sum()
+            return subsetSums(stones).minOf { s -> abs(total - 2 * s) }
+        }
+
+        // Returns every sum reachable by choosing any subset of nums.
+        // fold over stones, expanding the reachable-sum set at each step.
+        private fun subsetSums(nums: IntArray): Set<Int> =
+            nums.fold(mutableSetOf(0)) { reachable, stone ->
+                // snapshot prevents iterating while mutating
+                val prev = reachable.toList()
+                prev.forEach { reachable.add(it + stone) }
+                reachable
+            }
+    }
+}
+
 // pure recursion no mem
 class RSolution {
     fun lastStoneWeightII(stones: IntArray): Int {
