@@ -4,7 +4,7 @@ import misc.kia_part_one.printSeperator
 import kotlin.math.abs
 
 // Partition stones into two groups minimizing |S1 - S2|.
-// Track all reachable S2 sums; the answer is min over sums of |total - 2*s|.
+// Track all reachable S2 sums; the answer is min over sums of |total - 2*sum|.
 class HashSetSolution {
     class Solution {
         fun lastStoneWeightII(stones: IntArray): Int {
@@ -34,6 +34,7 @@ class RSolution {
             if (total >= target || i == stones.size) {
                 return abs(total - (stoneSum - total))
             }
+
             return minOf(dfs(i + 1, total), dfs(i + 1, total + stones[i]))
         }
 
@@ -61,7 +62,9 @@ class TopDown {
                 // Base: either we've filled group S2 past the midpoint, or no stones remain.
                 // The remaining stones implicitly form S1 = total - carried.
                 if (carried >= target || i == stones.size) {
-                    return abs(carried - (total - carried))
+//                    return abs(carried - (total - carried))
+
+                    return abs(total - 2 * carried)
                 }
 
                 if (dp[i][carried] != -1) return dp[i][carried]
