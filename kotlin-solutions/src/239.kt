@@ -2,7 +2,7 @@ package two39
 
 import misc.kia_part_one.printSeperator
 
-class SolutionCleanButCosty {
+class SolutionCleanButCostly {
     fun maxSlidingWindow(nums: IntArray, k: Int): IntArray = nums.toList()
         .windowed(k)
         .map { it.max() }.toIntArray()
