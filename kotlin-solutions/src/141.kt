@@ -61,3 +61,15 @@ class Solution2 {
 // 4. slow = 4, fast = 3
 // 5. slow = 1, fast = 1 == both equal == cycle
 // ---------------------------------------------
+fun main() {
+    var nullable: TestNullability? = TestNullability()
+//    nullable = null
+    val theInt = nullable?.int ?: 0
+    println(theInt)
+
+
+}
+
+class TestNullability(val int: Int = 10) {
+}
+
