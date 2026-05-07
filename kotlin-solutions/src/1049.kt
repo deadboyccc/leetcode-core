@@ -9,7 +9,7 @@ class HashSetSolution {
     class Solution {
         fun lastStoneWeightII(stones: IntArray): Int {
             val total = stones.sum()
-            return subsetSums(stones).minOf { s -> abs(total - 2 * s) }
+            return subsetSums(stones).minOf { sum -> abs(total - 2 * sum) }
         }
 
         // Returns every sum reachable by choosing any subset of nums.
