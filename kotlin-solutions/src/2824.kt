@@ -1,5 +1,27 @@
 package two824
 
+class MostReadableSolution {
+
+    fun countPairs(nums: List<Int>, target: Int): Int {
+        val sorted = nums.sorted()
+
+        var count = 0
+        var left = 0
+        var right = sorted.lastIndex
+
+        while (left < right) {
+            if (sorted[left] + sorted[right] < target) {
+                // every value between left+1..right also works
+                count += right - left
+                left++
+            } else {
+                right--
+            }
+        }
+
+        return count
+    }
+}
 class FPSolution {
     fun countPairs(nums: List<Int>, target: Int): Int =
 
