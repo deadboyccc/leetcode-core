@@ -165,53 +165,42 @@ Always remove the global smallest.
 After removing:
 insert next element from same row.
 */
+
 class SolutionHeap {
 
-    data class Node(
+    data class Element(
         val value: Int,
         val row: Int,
         val col: Int
     )
 
     fun kthSmallest(matrix: Array<IntArray>, k: Int): Int {
-
         val n = matrix.size
 
-        // min heap ordered by value
-        val minHeap = PriorityQueue<Node> { a, b ->
-            a.value - b.value
-        }
+        // Min-heap ordered by the element's value
+        // Initializing with k to avoid unnecessary resizing if k < n
+        val minHeap = PriorityQueue<Element>(compareBy { it.value })
 
-        // add first element of every row
+        // 1. Add the first element of every row to initialize the heap
         for (row in 0 until n) {
-            minHeap.offer(
-                Node(
-                    matrix[row][0],
-                    row,
-                    0
-                )
-            )
+            minHeap.offer(Element(matrix[row][0], row, 0))
         }
 
-        // remove k - 1 smallest elements
+        // 2. Remove k - 1 smallest elements from the heap
         repeat(k - 1) {
-
-            val current = minHeap.poll()
+            val current = minHeap.poll() ?: return@repeat
 
             val nextCol = current.col + 1
 
-            // add next element from same row
+            // 3. If there is a next element in the same row, add it to the heap
             if (nextCol < n) {
                 minHeap.offer(
-                    Node(
-                        matrix[current.row][nextCol],
-                        current.row,
-                        nextCol
-                    )
+                    Element(matrix[current.row][nextCol], current.row, nextCol)
                 )
             }
         }
 
+        // 4. The k-th smallest element is now at the top of the heap
         return minHeap.peek().value
     }
 }
