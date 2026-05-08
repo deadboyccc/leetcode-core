@@ -134,7 +134,6 @@ class SolutionBinarySearch {
                 row--
             }
         }
-
         return count
     }
 }
