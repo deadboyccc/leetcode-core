@@ -204,6 +204,70 @@ class SolutionHeap {
     }
 }
 
+// ========================================================
+// Another GPT Solution
+// ========================================================
+class Solution {
+
+    fun kthSmallest(matrix: Array<IntArray>, k: Int): Int {
+        val n = matrix.size
+
+        var left = matrix[0][0]
+        var right = matrix[n - 1][n - 1]
+
+        while (left < right) {
+            val mid = left + (right - left) / 2
+
+            if (countLessOrEqual(matrix, mid) < k) {
+                left = mid + 1
+            } else {
+                right = mid
+            }
+        }
+
+        return left
+    }
+
+    /**
+     * Counts how many numbers are <= target
+     *
+     * Time: O(n)
+     * Space: O(1)
+     */
+    private fun countLessOrEqual(
+        matrix: Array<IntArray>,
+        target: Int
+    ): Int {
+
+        val n = matrix.size
+
+        var row = n - 1
+        var col = 0
+
+        var count = 0
+
+        while (row >= 0 && col < n) {
+
+            if (matrix[row][col] <= target) {
+
+                // Everything above current cell
+                // in this column is also <= target
+                count += row + 1
+
+                // Move right
+                col++
+
+            } else {
+
+                // Current value too large
+                // Move upward to smaller values
+                row--
+            }
+        }
+
+        return count
+    }
+}
 
 // ========================================================
 // Main
