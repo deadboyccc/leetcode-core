@@ -1,2 +1,21 @@
 From earlier, we counted 127 Kotlin files with numeric names ([0-9]+.kt) under src (after migration path, mostly in src/main/kotlin). // Cursor
+--
 Based on the repository list you provided, there are exactly 125 numeric .kt files. // Gemini
+--
+There are **126 `.kt` files** in that directory. (I ignored the `misc/` folder and the `.png` file, and counted only files ending in `.kt`, including `review.kt`.) // gpt
+--
+Counting the `.kt` files from the listing (excluding the two `.png` files and the `misc` directory): **128 `.kt` files** // claude
+--
+
+asked to count only (number).kt format
+claude -> Counting only the files named purely as numbers (e.g. `55.kt`, `2.kt`), excluding `review.kt`:
+
+**127 `.kt` files**
+--
+gpt -> There are **125 numeric `.kt` files** (files whose names are purely numbers like `101.kt`, `2.kt`, `997.kt`, etc.) in that directory.
+--
+gemini-> Here is the complete list of the 125 numeric .kt files from the repository list you provided:
+-- 
+
+L o L
+
