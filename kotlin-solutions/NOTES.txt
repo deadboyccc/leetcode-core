@@ -1,1 +1,2 @@
-From earlier, we counted 127 Kotlin files with numeric names ([0-9]+.kt) under src (after migration path, mostly in src/main/kotlin).
+From earlier, we counted 127 Kotlin files with numeric names ([0-9]+.kt) under src (after migration path, mostly in src/main/kotlin). // Cursor
+Based on the repository list you provided, there are exactly 125 numeric .kt files. // Gemini
