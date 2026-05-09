@@ -17,6 +17,7 @@ using namespace std;
  * 3. All points must be connected (directly or indirectly).
  * 4. Return the minimum sum of edge weights.
  */
+
 class Solution {
  private:
   struct Point {

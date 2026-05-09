@@ -2,6 +2,7 @@ package misc.kia_part_one.par1.ch4.section3
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import misc.kia_part_one.printSeperator
 import kotlin.random.Random
 
 interface JSONFactory<T> {
@@ -60,15 +61,25 @@ class SerialPerson(var name: String, var age: Int) {
 
 fun main() {
     val jsonString = """{"name": "Bob", "age": 25}"""
+
+    printSeperator()
     val serialPerson = SerialPerson.fromJSON(jsonString)
     println(serialPerson)
+    printSeperator()
 
+    printSeperator()
     val r1 = Random.Default.nextInt(0, 100).coerceIn(18..35)
     println("r1=$r1")
     val r2 = Random.nextInt()
+    printSeperator()
 
+    printSeperator()
     val person = Person.fromJSON(jsonString)
+    println(person)
+    printSeperator()
+
+    printSeperator()
     val personExtensionFunctions = ExtensionFunctionsPerson.fromJSON(jsonString)
     println(personExtensionFunctions)
-    println(person.toString())
+    printSeperator()
 }
