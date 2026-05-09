@@ -10,43 +10,65 @@ interface JSONFactory<T> {
 
 @Serializable
 class Person(val name: String, val age: Int) {
-    override fun toString(): String {
-        return "$name, $age"
-    }
+
+
     companion object Loader : JSONFactory<Person> {
 
         override fun fromJSON(jsonText: String): Person {
             return Json.decodeFromString<Person>(jsonText)
         }
     }
+
+    override fun toString(): String {
+        return "Person(name='$name', age=$age)"
+    }
 }
 
 @Serializable
 class ExtensionFunctionsPerson(val name: String, val age: Int) {
-    override fun toString(): String {
-        return "$name, $age"
-    }
+
 
     companion object {
         fun test(): Unit {}
     }
+
+    override fun toString(): String {
+        return "ExtensionFunctionsPerson(name='$name', age=$age)"
+    }
 }
 
-fun ExtensionFunctionsPerson.Companion.toJSON(jsonText: String): Person {
-    return Json.decodeFromString<Person>(jsonText)
+fun ExtensionFunctionsPerson.Companion.fromJSON(jsonText: String): ExtensionFunctionsPerson {
+    return Json.decodeFromString<ExtensionFunctionsPerson>(jsonText)
 }
 
 
+@Serializable
+class SerialPerson(var name: String, var age: Int) {
+    companion object Loader : JSONFactory<SerialPerson> {
+        override fun fromJSON(jsonText: String): SerialPerson {
+            return Json.decodeFromString<SerialPerson>(jsonText)
+        }
+    }
+
+    override fun toString(): String {
+        return "SerialPerson(name='$name', age=$age)"
+    }
+
+
+}
 
 
 fun main() {
+    val jsonString = """{"name": "Bob", "age": 25}"""
+    val serialPerson = SerialPerson.fromJSON(jsonString)
+    println(serialPerson)
 
-    val r1 = Random.Default.nextInt(18, 100)
+    val r1 = Random.Default.nextInt(0, 100).coerceIn(18..35)
     println("r1=$r1")
     val r2 = Random.nextInt()
 
-    val person = Person.fromJSON("""{"name": "Bob", "age": 25}""")
-    val personExtensionFunctions = ExtensionFunctionsPerson("test", r1.coerceIn(18..35))
+    val person = Person.fromJSON(jsonString)
+    val personExtensionFunctions = ExtensionFunctionsPerson.fromJSON(jsonString)
     println(personExtensionFunctions)
     println(person.toString())
 }
