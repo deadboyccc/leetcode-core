@@ -64,3 +64,7 @@ replay_pid*
 **/out/
 **/.kotlin/
 
+# Lock files (generated/transient)
+*.lock
+**/*.lock
+
