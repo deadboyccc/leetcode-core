@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/graph-algorithms-leetcode.iml" filepath="$PROJECT_DIR$/.idea/graph-algorithms-leetcode.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin-solutions/kotlin-solutions.iml" filepath="$PROJECT_DIR$/kotlin-solutions/kotlin-solutions.iml" />
     </modules>
   </component>
 </project>
