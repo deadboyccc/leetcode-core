@@ -10,6 +10,9 @@ interface JSONFactory<T> {
 
 @Serializable
 class Person(val name: String, val age: Int) {
+    override fun toString(): String {
+        return "$name, $age"
+    }
     companion object Loader : JSONFactory<Person> {
 
         override fun fromJSON(jsonText: String): Person {
@@ -24,4 +27,5 @@ fun main() {
     val r2 = Random.nextInt()
 
     val person = Person.fromJSON("""{"name": "Bob", "age": 25}""")
+    println(person.toString())
 }
