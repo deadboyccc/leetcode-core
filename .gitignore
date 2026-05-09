@@ -58,3 +58,9 @@
 hs_err_pid*
 replay_pid*
 
+### Gradle / IntelliJ build outputs
+**/.gradle/
+**/build/
+**/out/
+**/.kotlin/
+
