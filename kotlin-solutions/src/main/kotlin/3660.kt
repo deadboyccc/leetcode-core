@@ -1,5 +1,34 @@
 package three660
 
+class DivideAndConquer {
+    // aiming for the most readable solution over perf
+    fun maxValue(nums: IntArray): IntArray {
+        var rightMax = nums.max()
+        var rightMaxIndex = nums.lastIndexOf(rightMax)
+        var rightSideMin = nums.sliceArray(rightMaxIndex..nums.lastIndex).min()
+        // we will continue to process right to left, as long as our current global max idx is within bounds
+        // we will in place change nums and keep needed states in local stack variables
+        while (rightMaxIndex >= 0) {
+            val prevRightMax = rightMax
+            val prevRightMaxIndex = rightMaxIndex
+            val prevRightMin = rightSideMin
+            // fill right of right max index to right max
+            for (i in prevRightMaxIndex downTo nums.lastIndex) {
+                if (nums[i] < prevRightMax) {
+                    nums[i] = prevRightMax
+                }
+            }
+            // check left side max and if it can reach right side min and update state
+            // todo
+
+
+        }
+
+
+    }
+
+}
+
 // claude
 class Solution {
     fun maxValue(nums: IntArray): IntArray {
