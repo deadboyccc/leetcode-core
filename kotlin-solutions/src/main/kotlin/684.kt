@@ -1,5 +1,27 @@
 package six84
 
+class MoreReadableIdiomatic {
+    class Solution {
+        fun findRedundantConnection(edges: Array<IntArray>): IntArray {
+            val parent = IntArray(edges.size + 1) { it }
+
+            fun find(x: Int): Int {
+                if (parent[x] != x) parent[x] = find(parent[x])
+                return parent[x]
+            }
+
+            for ((u, v) in edges) {
+                val ru = find(u)
+                val rv = find(v)
+                if (ru == rv) return intArrayOf(u, v)
+                parent[ru] = rv
+            }
+
+            error("unreachable")
+        }
+    }
+}
+
 class Solution {
     fun findRedundantConnection(edges: Array<IntArray>): IntArray {
 
@@ -12,7 +34,7 @@ class Solution {
             }
         }
 
-        return intArrayOf(-1, -1) // unreachable given valid input
+        return intArrayOf(-1, -1) // unreachable given valid input [ guaranteed ]
     }
 
     class UnionFind(n: Int) {
