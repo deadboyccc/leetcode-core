@@ -95,6 +95,7 @@ class MonotonicStack {
         return answer
     }
 }
+
 class DivideAndConquer {
     fun maxValue(nums: IntArray): IntArray {
         val n = nums.size
