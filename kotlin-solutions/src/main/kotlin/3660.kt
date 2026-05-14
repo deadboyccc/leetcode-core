@@ -1,75 +1,20 @@
 package three660
 
-class DivideAndConquer {
-    // aiming for the most readable solution over perf
-    fun maxValue(nums: IntArray): IntArray {
-        var rightMax = nums.max()
-        var rightMaxIndex = nums.lastIndexOf(rightMax)
-        var rightSideMin = nums.sliceArray(rightMaxIndex..nums.lastIndex).min()
-        // we will continue to process right to left, as long as our current global max idx is within bounds
-        // we will in place change nums and keep needed states in local stack variables
-        while (rightMaxIndex >= 0) {
-            val prevRightMax = rightMax
-            val prevRightMaxIndex = rightMaxIndex
-            val prevRightMin = rightSideMin
-            // fill right of right max index to right max
-            for (i in prevRightMaxIndex downTo nums.lastIndex) {
-                if (nums[i] < prevRightMax) {
-                    nums[i] = prevRightMax
-                }
-            }
-            // check left side max and if it can reach right side min and update state
-            // todo
+class MonotonicStack {
 
+    /*
+     * Each connected component becomes one continuous segment.
+     *
+     * Everybody inside a component can eventually reach
+     * the component's maximum value.
+     *
+     * So the problem becomes:
+     *
+     * "Build connected components and assign their max."
+     */
 
-        }
-
-
-    }
-
-}
-
-// claude
-class Solution {
-    fun maxValue(nums: IntArray): IntArray {
-        val n = nums.size
-        val parent = IntArray(n) { it }
-        val compMax = nums.copyOf()
-
-        fun find(x: Int): Int {
-            if (parent[x] != x) parent[x] = find(parent[x])
-            return parent[x]
-        }
-
-        fun union(a: Int, b: Int) {
-            val ra = find(a);
-            val rb = find(b)
-            if (ra == rb) return
-            parent[rb] = ra
-            compMax[ra] = maxOf(compMax[ra], compMax[rb])
-        }
-
-        // (index, effectiveMax) — effectiveMax = max value in this component
-        val stack = ArrayDeque<Pair<Int, Int>>()
-
-        for (j in 0 until n) {
-            var curMax = nums[j]
-            while (stack.isNotEmpty() && stack.last().second > nums[j]) {
-                val (idx, effMax) = stack.removeLast()
-                union(idx, j)
-                curMax = maxOf(curMax, effMax)
-            }
-            stack.addLast(j to curMax)
-        }
-
-        return IntArray(n) { compMax[find(it)] }
-    }
-}
-
-class Editorial2Solution {
-
-    data class Item(
-        var value: Int,
+    data class Component(
+        var maxValue: Int,
         var left: Int,
         var right: Int
     )
@@ -78,47 +23,98 @@ class Editorial2Solution {
         val n = nums.size
         val answer = IntArray(n)
 
-        val stack = mutableListOf<Item>()
+        /*
+         * Stack stores connected components.
+         *
+         * Components are kept in increasing order of maxValue.
+         *
+         * Example:
+         *
+         * [max=3] [max=7] [max=12]
+         */
+        val stack = ArrayDeque<Component>()
 
         for (i in nums.indices) {
 
-            val current = Item(
-                value = nums[i],
+            /*
+             * Start as its own component.
+             */
+            val current = Component(
+                maxValue = nums[i],
                 left = i,
                 right = i
             )
 
+            /*
+             * If previous component's maximum
+             * is bigger than current number:
+             *
+             * previousMax > nums[i]
+             *
+             * then they connect.
+             *
+             * Once connected,
+             * components merge into one larger component.
+             */
             while (
                 stack.isNotEmpty() &&
-                stack.last().value > nums[i]
+                stack.last().maxValue > nums[i]
             ) {
-                val top = stack.removeAt(stack.lastIndex)
+                val previous = stack.removeLast()
 
-                current.value = maxOf(current.value, top.value)
-                current.left = top.left
+                /*
+                 * Merged component keeps:
+                 *
+                 * - biggest maximum
+                 * - leftmost boundary
+                 */
+                current.maxValue =
+                    maxOf(current.maxValue, previous.maxValue)
+
+                current.left = previous.left
             }
 
-            stack.add(current)
+            /*
+             * Extend merged component's right boundary.
+             */
+            current.right = i
+
+            stack.addLast(current)
         }
 
-        for (item in stack) {
-            for (index in item.left..item.right) {
-                answer[index] = item.value
+        /*
+         * Every index inside a component
+         * gets the component maximum.
+         */
+        for (component in stack) {
+            for (index in component.left..component.right) {
+                answer[index] = component.maxValue
             }
         }
 
         return answer
     }
 }
-
-class EditorialSolution {
-
+class DivideAndConquer {
     fun maxValue(nums: IntArray): IntArray {
         val n = nums.size
         val answer = IntArray(n)
 
-        // prevMax[i] = Pair(maxValueSoFar, indexOfThatMax)
-        val prevMax = Array(n) { 0 to 0 }
+        /*
+         * prefixMax[i] =
+         *   biggest value in nums[0..i]
+         *
+         * prefixMaxIndex[i] =
+         *   where that biggest value lives
+         *
+         * Example:
+         * nums = [7,2,5,1,9]
+         *
+         * prefixMax      = [7,7,7,7,9]
+         * prefixMaxIndex = [0,0,0,0,4]
+         */
+        val prefixMax = IntArray(n)
+        val prefixMaxIndex = IntArray(n)
 
         var currentMax = Int.MIN_VALUE
         var currentMaxIndex = -1
@@ -129,42 +125,99 @@ class EditorialSolution {
                 currentMaxIndex = i
             }
 
-            prevMax[i] = currentMax to currentMaxIndex
+            prefixMax[i] = currentMax
+            prefixMaxIndex[i] = currentMaxIndex
         }
 
-        fun process(
+        /*
+         * Processes interval [0..right]
+         *
+         * rightMin:
+         *   smallest value in the already-solved region on the right
+         *
+         * rightAnswer:
+         *   maximum value reachable in the already-solved region
+         *
+         * Core idea:
+         *
+         * If current prefix maximum > rightMin,
+         * then this interval can connect to the solved right side,
+         * therefore everybody upgrades to rightAnswer.
+         *
+         * Otherwise this interval stays isolated,
+         * and everybody's answer becomes its own prefix maximum.
+         */
+        fun solve(
             right: Int,
             rightMin: Int,
-            rightMax: Int
+            rightAnswer: Int
         ) {
-            val (prefixMax, pivotIndex) = prevMax[right]
+            if (right < 0) return
 
-            val currentAnswer =
-                if (prefixMax <= rightMin) prefixMax
-                else rightMax
+            // Biggest value inside current interval [0..right]
+            val currentMax = prefixMax[right]
 
-            var nextRightMin = minOf(prefixMax, rightMin)
+            // Where that maximum lives
+            val pivot = prefixMaxIndex[right]
 
-            for (i in pivotIndex..right) {
-                answer[i] = currentAnswer
+            /*
+             * Current chunk is [pivot..right]
+             *
+             * Example:
+             *
+             * [7,2,5,1,9,4,3]
+             *          ^
+             *        pivot=4
+             *
+             * chunk = [9,4,3]
+             */
+
+            val canReachRightSide = currentMax > rightMin
+
+            // Final answer for this chunk
+            val chunkAnswer =
+                if (canReachRightSide) rightAnswer
+                else currentMax
+
+            /*
+             * Update minimum reachable value.
+             *
+             * This becomes the new "bridge"
+             * for intervals further left.
+             */
+            var nextRightMin = rightMin
+
+            for (i in pivot..right) {
+                answer[i] = chunkAnswer
                 nextRightMin = minOf(nextRightMin, nums[i])
             }
 
-            if (pivotIndex == 0) {
-                return
-            }
-
-            process(
-                pivotIndex - 1,
-                nextRightMin,
-                currentAnswer
+            /*
+             * Recurse on remaining left side:
+             *
+             * [0..pivot-1]
+             */
+            solve(
+                right = pivot - 1,
+                rightMin = nextRightMin,
+                rightAnswer = chunkAnswer
             )
         }
 
-        process(
+        /*
+         * Initially:
+         *
+         * nothing exists on the right,
+         * so:
+         *
+         * rightMin = +infinity
+         *
+         * and the first chunk keeps its own maximum.
+         */
+        solve(
             right = n - 1,
             rightMin = Int.MAX_VALUE,
-            rightMax = 0
+            rightAnswer = prefixMax[n - 1]
         )
 
         return answer
